@@ -18,31 +18,28 @@
                 <div class="roll-box">
 
                     <!-- add dice
-                    <div class="dice clearfix" id="dice-0">
-                        <img src="dice-5.png" alt="Dice" class="dice">
-                        <div class="item__delete">
-                            <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
-                        </div>
-
-
-                    </div>
-                    -->
+            <div class="dice" id="%id%"><img src="%src%" class="dice-img"><div class="item__delete"><button class="btn-die-delete"><i class="ion-ios-close-outline"></i></button></div></div>
+            -->
 
                 </div>
 
 
-                
+
                 <div class="roll-current-box">
                     <div class="roll-current-label">Current</div>
                     <div class="roll-current-score" id="current">11</div>
                 </div>
             </div>
-            
+
 
 
 
             <button class="btn-clear">Clear Board</button>
             <button class="btn-roll"><i class="ion-ios-loop"></i>Roll dice</button>
+            <select class="add__type">
+                <option value="d4" selected>d4</option>
+                <option value="d6">d6</option>
+            </select>
             <button class="btn-add"><i class="ion-ios-plus"></i>Add die</button>
 
         </div>

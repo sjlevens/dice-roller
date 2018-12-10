@@ -9,23 +9,27 @@ var diceController = (function () {
         dice: []
     };
 
-    var Dice = function (id) {
+    var Dice = function (id, type) {
         this.id = id;
+        this.type = type;
         this.value = 1;
-        this.image = 'dice-1.png';
+        this.image = 'dice-'+this.type+'-1.png';
+        
     };
 
     Dice.prototype.roll = function () {
+        var max;
+        max = parseInt(this.type.slice(1));
 
-        this.value = Math.floor(Math.random() * 6) + 1;
-        this.image = 'dice-' + this.value + '.png';
+        this.value = Math.floor(Math.random() * max) + 1;
+        this.image = 'dice-' + this.type+'-'+this.value + '.png';
 
     };
 
     //Public Methods
     return {
 
-        addDie: function () {
+        addDie: function (type) {
             var id, newDie;
 
             if (data.dice.length > 0) {
@@ -33,7 +37,7 @@ var diceController = (function () {
 
             } else { id = 0; }
 
-            newDie = new Dice(id);
+            newDie = new Dice(id, type);
 
             data.dice.push(newDie);
 
@@ -93,7 +97,8 @@ var UIController = (function () {
         dice: '.dice',
         currentScore: '.roll-current-score',
         deleteDie: '.btn-die-delete',
-        diceImage:'.dice-img'
+        diceImage: '.dice-img',
+        diceType: '.add__type'
 
     };
 
@@ -148,6 +153,12 @@ var UIController = (function () {
 
             document.querySelector(DOMstrings.currentScore).textContent = total;
 
+        },
+
+        getType: function () {
+
+            return document.querySelector(DOMstrings.diceType).value;
+
         }
 
 
@@ -177,9 +188,12 @@ var controller = (function (diceCtrl, UICtrl) {
     };
 
     var ctrlAddDie = function () {
-        var newDie;
+        var newDie, type;
 
-        newDie = diceCtrl.addDie();
+        type = UICtrl.getType();
+        console.log(type);
+
+        newDie = diceCtrl.addDie(type);
         UICtrl.addDie(newDie);
 
     };
@@ -187,10 +201,13 @@ var controller = (function (diceCtrl, UICtrl) {
     var ctrlDeleteDie = function (event) {
         var dieID;
 
-        dieID = parseInt(event.target.parentNode.parentNode.parentNode.id);     
+        if (event.target.parentNode.parentNode.parentNode.id) {
+            dieID = parseInt(event.target.parentNode.parentNode.parentNode.id);
 
-        diceCtrl.deleteDie(dieID);
-        UICtrl.removeDie(dieID);
+            diceCtrl.deleteDie(dieID);
+            UICtrl.removeDie(dieID);
+
+        }
 
     };
 
