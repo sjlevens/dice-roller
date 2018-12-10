@@ -4,10 +4,9 @@
 
 var diceController = (function () {
 
-    var dice = [];
-
     var data = {
-        total: 0
+        total: 0,
+        dice: []
     };
 
     var Dice = function (id) {
@@ -29,22 +28,33 @@ var diceController = (function () {
         addDie: function () {
             var id, newDie;
 
-            if (dice.length > 0) {
-                id = dice[dice.length - 1].id + 1;
+            if (data.dice.length > 0) {
+                id = data.dice[data.dice.length - 1].id + 1;
 
             } else { id = 0; }
 
             newDie = new Dice(id);
 
-            dice.push(newDie);
+            data.dice.push(newDie);
 
             return newDie;
 
         },
 
         deleteDie: function (id) {
+            var IDs, index;
 
+            IDs = data.dice.map(function (current) {
+                
+                return current.id;
+                
+            });
 
+            index = IDs.indexOf(id);
+
+            if (index !== -1) {
+                data.dice.splice(index, 1);
+            }
 
         },
 
@@ -53,14 +63,14 @@ var diceController = (function () {
 
             data.total = 0;
 
-            dice.forEach(function (current) {
+            data.dice.forEach(function (current) {
 
                 current.roll();
                 data.total += current.value;
 
             });
 
-            return dice;
+            return data.dice;
 
         },
 
@@ -83,6 +93,7 @@ var UIController = (function () {
         dice: '.dice',
         currentScore: '.roll-current-score',
         deleteDie: '.btn-die-delete',
+        diceImage:'.dice-img'
 
     };
 
@@ -105,8 +116,7 @@ var UIController = (function () {
 
             element = DOMstrings.rollBox;
 
-            //<div class="dice" id="%id%"><img src="%src%"><div class="item__delete"><button class="btn-die-delete"><i class="ion-ios-close-outline"></i></button></div></div>
-            html = '<img src="%src%" class="dice" id="%id%"><div class="item__delete"><button class="btn-die-delete"><i class="ion-ios-close-outline"></i></button></div>';            
+            html = '<div class="dice" id="%id%"><img src="%src%" class="dice-img"><div class="item__delete"><button class="btn-die-delete"><i class="ion-ios-close-outline"></i></button></div></div>';            
 
             newHtml = html.replace('%id%', newDie.id);
             
@@ -117,14 +127,22 @@ var UIController = (function () {
 
         },
 
+        removeDie: function (ID) {
+
+            var element = document.getElementById(ID);
+            element.parentNode.removeChild(element);
+
+
+        },
+
         updateDice: function (diceRolled, total) {
 
             var fields;
 
             fields = document.querySelectorAll(DOMstrings.dice);
 
-            nodeListForEach(fields, function (current, index) {
-                current.src = diceRolled[index].image;
+            nodeListForEach(fields, function (current, index) {               
+                current.firstChild.src = diceRolled[index].image;
 
             });
 
@@ -169,9 +187,10 @@ var controller = (function (diceCtrl, UICtrl) {
     var ctrlDeleteDie = function (event) {
         var dieID;
 
-        dieID = event.target.parentNode.parentNode.parentNode.id;     
+        dieID = parseInt(event.target.parentNode.parentNode.parentNode.id);     
 
         diceCtrl.deleteDie(dieID);
+        UICtrl.removeDie(dieID);
 
     };
 

@@ -55,7 +55,6 @@ body {
 **********************************************/
 
 
-
 .roll-box {
     background-color: #555;
     width: 100%;
@@ -137,9 +136,22 @@ i {
     top: 750px;
 }
 
+.btn-die-delete {
+    position: relative;
+    top: 10%;
+    left: 10%%;
+}
+
 .dice {
-    left: 50%;
-    top: 50%;
-    height: 100px;
+    left: 20%;
+    top: 20%;
+    height: 50px;
+    shape-margin: 12px;
+}
+
+.dice-img {
+    left: 20%;
+    top: 20%;
+    height: 50px;
     shape-margin: 12px;
 }
