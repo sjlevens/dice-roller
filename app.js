@@ -6,22 +6,23 @@ var diceController = (function () {
 
     var data = {
         total: 0,
-        dice: []
+        dice: [],
+        diceHeld: [0,0], //[d4,d6]
+        max: 0
     };
 
     var Dice = function (id, type) {
         this.id = id;
         this.type = type;
         this.value = 1;
-        this.image = 'dice-'+this.type+'-1.png';
+        this.image = 'dice-' + this.type + '-1.png';
+        this.max = parseInt(this.type.slice(1));
         
     };
 
     Dice.prototype.roll = function () {
-        var max;
-        max = parseInt(this.type.slice(1));
 
-        this.value = Math.floor(Math.random() * max) + 1;
+        this.value = Math.floor(Math.random() * this.max) + 1;
         this.image = 'dice-' + this.type+'-'+this.value + '.png';
 
     };
@@ -40,6 +41,14 @@ var diceController = (function () {
             newDie = new Dice(id, type);
 
             data.dice.push(newDie);
+            data.total += newDie.value;
+            data.max += newDie.max;
+
+            if (type === 'd4') {
+                data.diceHeld[0]++;
+            } else if (type === 'd6') {
+                data.diceHeld[1]++;
+            }
 
             return newDie;
 
@@ -57,8 +66,27 @@ var diceController = (function () {
             index = IDs.indexOf(id);
 
             if (index !== -1) {
+                data.total -= data.dice[index].value;
+                data.max -= data.dice[index].max;
+                
+
+                if (data.dice[index].type === 'd4') {
+                    data.diceHeld[0]--;
+                } else if (data.dice[index].type === 'd6') {
+                    data.diceHeld[1]--;
+                }
+
                 data.dice.splice(index, 1);
             }
+
+        },
+
+        clearBoard: function () {
+
+            data.dice = [];
+            data.total = 0;
+            data.diceHeld = [0, 0];
+            data.max = 0;
 
         },
 
@@ -80,6 +108,14 @@ var diceController = (function () {
 
         getTotal: function () {
             return data.total;
+        },
+
+        getDice: function () {
+            return data.dice;
+        },
+
+        getData: function () {
+            return data;
         }
 
 
@@ -98,7 +134,9 @@ var UIController = (function () {
         currentScore: '.roll-current-score',
         deleteDie: '.btn-die-delete',
         diceImage: '.dice-img',
-        diceType: '.add__type'
+        diceType: '.add__type',
+        currentDice: '.roll-current-dice',
+        max: '.roll-current-max'
 
     };
 
@@ -127,7 +165,6 @@ var UIController = (function () {
             
             newHtml = newHtml.replace('%src%', newDie.image);
 
-
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 
         },
@@ -140,7 +177,21 @@ var UIController = (function () {
 
         },
 
-        updateDice: function (diceRolled, total) {
+        updateData: function (data) {
+
+            //Update total roll
+            document.querySelector(DOMstrings.currentScore).textContent = data.total;
+
+            //Dice present
+            document.querySelector(DOMstrings.currentDice).textContent = data.diceHeld[0]+ 'd4 + '+ data.diceHeld[1]+'d6';
+
+            //Max
+            document.querySelector(DOMstrings.max).textContent = data.max;
+
+
+        },
+
+        updateDice: function (diceRolled) {
 
             var fields;
 
@@ -151,7 +202,19 @@ var UIController = (function () {
 
             });
 
-            document.querySelector(DOMstrings.currentScore).textContent = total;
+        },
+
+        clearBoard: function () {
+
+            var fields;
+
+            fields = document.querySelectorAll(DOMstrings.dice);
+
+            nodeListForEach(fields, function (current) {
+
+                UIController.removeDie(current.id);
+
+            });
 
         },
 
@@ -191,10 +254,10 @@ var controller = (function (diceCtrl, UICtrl) {
         var newDie, type;
 
         type = UICtrl.getType();
-        console.log(type);
 
         newDie = diceCtrl.addDie(type);
         UICtrl.addDie(newDie);
+        UICtrl.updateData(diceCtrl.getData());
 
     };
 
@@ -208,21 +271,30 @@ var controller = (function (diceCtrl, UICtrl) {
             UICtrl.removeDie(dieID);
 
         }
+        UICtrl.updateData(diceCtrl.getData());
 
     };
 
     var ctrlRollDice = function () {
-        var diceRolled, total;
+        var diceRolled, data;
 
         diceRolled = diceCtrl.rollDice();
 
-        total = diceCtrl.getTotal();
+        data = diceCtrl.getData();
 
-        UICtrl.updateDice(diceRolled, total);
+        UICtrl.updateDice(diceRolled);
+        UICtrl.updateData(data);
+
 
     };
 
     var ctrlClearBoard = function () {
+
+        
+        diceCtrl.clearBoard();
+        UICtrl.updateData(diceCtrl.getData());
+        UICtrl.clearBoard();
+
 
     };
 
@@ -230,6 +302,7 @@ var controller = (function (diceCtrl, UICtrl) {
 
         ctrlInit: function () {
             setupEventListeners();
+            ctrlClearBoard();
         }
 
     };
