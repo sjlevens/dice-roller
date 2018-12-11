@@ -45,6 +45,7 @@ body {
     float: left;
     height: 800px;
     padding: 100px;
+    float: left;
 }
 
 
@@ -62,6 +63,7 @@ body {
     margin: 0 auto;
     padding: 12px;
     text-align: center;
+    float: left;
 }
 
 .roll-current-box {
@@ -73,6 +75,7 @@ body {
     margin-top: 12px;
     padding: 12px;
     text-align: center;
+    float: left;
 }
 
 .roll-current-label {
@@ -83,6 +86,50 @@ body {
 }
 
 .roll-current-score {
+    font-size: 30px;
+}
+.dice-current-box {
+    background-color: #EB4D4D;
+    color: #fff;
+    width: 20%;
+    height: 15%;
+    margin: 0 auto;
+    margin-top: 12px;
+    padding: 12px;
+    text-align: center;
+    float: left;
+}
+
+.dice-current-label {
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #222;
+}
+
+.roll-current-dice {
+    font-size: 30px;
+}
+.dice-current-max-box {
+    background-color: #EB4D4D;
+    color: #fff;
+    width: 20%;
+    height: 15%;
+    margin: 0 auto;
+    margin-top: 12px;
+    padding: 12px;
+    text-align: center;
+    float: left;
+}
+
+.dice-current-max-label {
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #222;
+}
+
+.roll-current-max {
     font-size: 30px;
 }
 
@@ -114,6 +161,7 @@ button {
         outline: none;
     }
 
+
 i {
     color: #EB4D4D;
     display: inline-block;
@@ -129,24 +177,35 @@ i {
     top: 45px;
 }
 .btn-add {
-    top: 700px;
+    top: 750px;
 }
 
 .btn-roll {
-    top: 750px;
+    top: 700px;
 }
 
 .btn-die-delete {
     position: relative;
-    top: 10%;
-    left: 10%%;
+    width: 0px;
+    left: 25%;
+    top:25%;
+    display: none;
+}
+
+.dice:hover .btn-die-delete {
+    display: block;
+}
+
+
+die-button:focus {
+    outline: none;
 }
 
 .dice {
-    left: 20%;
-    top: 20%;
     height: 50px;
-    shape-margin: 12px;
+    margin-top: 12px;
+    margin-left: 12px;
+    float: left;
 }
 
 .dice-img {
@@ -154,4 +213,20 @@ i {
     top: 20%;
     height: 50px;
     shape-margin: 12px;
+}
+.add__type {
+    width: 55px;
+    border: 1px solid #e7e7e7;
+    height: 44px;
+    font-size: 18px;
+    background-color: #fff;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-weight: 300;
+    transition: border 0.3s;
+}
+
+.add-panel {
+    margin: 0 auto;
+    text-align: center;
 }
