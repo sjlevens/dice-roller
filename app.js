@@ -186,7 +186,7 @@ var UIController = (function () {
             document.querySelector(DOMstrings.currentDice).textContent = data.diceHeld[0]+ 'd4 + '+ data.diceHeld[1]+'d6';
 
             //Max
-            document.querySelector(DOMstrings.max).textContent = data.max;
+            document.querySelector(DOMstrings.max).textContent = (data.dice.length)+'-'+data.max;
 
 
         },
