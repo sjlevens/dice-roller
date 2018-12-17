@@ -188,7 +188,7 @@ i {
     position: relative;
     width: 0px;
     left: 25%;
-    top:25%;
+    transform: translateY(-40px);
     display: none;
 }
 
